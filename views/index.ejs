@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+
+<head>
+  <title>
+    YTDL
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <main class="container">
+    <form action="/convert" method="POST">
+      <input type="url" name="youtubeURL" id="youtubeURL" required placeholder="https://youtube.com/?v=">
+      <button class="btn" type="submit">Download</button>
+    </form>
+  </main>
+</body>
+
 </html>
