@@ -26,6 +26,14 @@ body {
 
 form {
   display: flex;
+  flex-direction: column;
+}
+form > div {
+  display: flex;
+}
+.error {
+  text-align: center;
+  color: red;
 }
 .btn {
   background-color: #605856;
