@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const validator = require("validator");
+const ytdl = require("youtube-dl");
+const path = require("path");
 /* GET home page. */
 router.get("/", function(req, res, next) {
   res.render("index", {
@@ -28,7 +30,33 @@ router.post(
       next();
     }
   },
-  (req, res, next) => {}
+  (req, res, next) => {
+    //yeap.
+    ytdl.getInfo(req.body.youtubeURL, function(err, info) {
+      if (err) throw err;
+      console.log("title:", info.title);
+      res.locals.title = info.title;
+      next();
+    });
+  },
+  (req, res, next) => {
+    p = path.join(__dirname + "/../public/files/%(title)s.%(ext)s");
+    console.log(`Path is ${p}`);
+    res.locals.path = path.join(
+      __dirname + "/../public/files/" + res.locals.title + ".mp3"
+    );
+    ytdl.exec(
+      req.body.youtubeURL,
+      ["--no-playlist", "-x", "--audio-format", "mp3", "-o", p],
+      {},
+      (err, output) => {
+        if (err) throw err;
+        console.log(output.join("\n"));
+        //change p
+        res.download(res.locals.path);
+      }
+    );
+  }
 );
 
 module.exports = router;
