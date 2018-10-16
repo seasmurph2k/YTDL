@@ -34,17 +34,13 @@ router.post(
     //yeap.
     ytdl.getInfo(req.body.youtubeURL, function(err, info) {
       if (err) throw err;
-      console.log("title:", info.title);
-      res.locals.title = info.title;
+      let x = info.title.replace(/[^A-Za-z0-9 ]/gi, "");
+      res.locals.title = x;
       next();
     });
   },
   (req, res, next) => {
-    p = path.join(__dirname + "/../public/files/%(title)s.%(ext)s");
-    console.log(`Path is ${p}`);
-    res.locals.path = path.join(
-      __dirname + "/../public/files/" + res.locals.title + ".mp3"
-    );
+    p = path.join(__dirname + "/../public/files/" + res.locals.title + ".mp3");
     ytdl.exec(
       req.body.youtubeURL,
       ["--no-playlist", "-x", "--audio-format", "mp3", "-o", p],
@@ -52,8 +48,7 @@ router.post(
       (err, output) => {
         if (err) throw err;
         console.log(output.join("\n"));
-        //change p
-        res.download(res.locals.path);
+        res.download(p);
       }
     );
   }
